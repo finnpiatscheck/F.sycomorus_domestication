@@ -1,0 +1,293 @@
+Stacks usage
+
+0. process_radtags 
+
+#!/bin/bash		
+#SBATCH --ntasks=24		
+#SBATCH --partition=biocrunch		
+#SBATCH --nodes=1		
+#SBATch --mem=32G		
+#SBATCH --time=7-00:00:00		
+#SBATCH --error=/work/LAS/kjroe-lab/fig/process_radtags_out.%J.err}		
+		
+module load gcc/7.3.0-xegsmw4		
+module load stacks/2.53-vlzyasr		
+		
+process_radtags -p /work/LAS/kjroe-lab/fig/2018-March/Lane4-1 -o /work/LAS/kjroe-lab/fig/process_radtags_out2/ -b /work/LAS/kjroe-lab/fig/Barcode_fig/Barcodes_L1_IDX1.txt -e pstI -E phred33 -r -c -q -D -t 90		
+
+1. ustacks
+
+#!/bin/bash		
+#SBATCH --ntasks=64		
+#SBATCH --partition=biocrunch		
+#SBATCH --nodes=1		
+#SBATch --mem=128G		
+#SBATCH --time=15-00:00:00		
+#SBATCH --error=/work/LAS/kjroe-lab/fig/ustacks_out.%J.err}		
+		
+module load gcc/7.3.0-xegsmw4		
+module load stacks/2.53-vlzyasr
+ 
+#!/bin/bash
+files="95-12B.fq.gz AGN2B.fq.gz  BIS5B.fq.gz EPL1A.fq.gz IS5.fq.gz LAN1B.fq.gz LIK2B.fq.gz M3.fq.gz  MEN02_2.fq.gz SA1.fq.gz SA7.fq.gz SON001.fq.gz
+95-18.fq.gz AGN3A.fq.gz  BIS6A.fq.gz EPL1B.fq.gz IS5_r.fq.gz LAN2A.fq.gz LXR1A.fq.gz M4.fq.gz  MEN03.fq.gz SA1_r.fq.gz SA7_r.fq.gz TRC01_1.fq.gz
+95-200.fq.gz AGN3B.fq.gz  BIS6B.fq.gz HAH01_1.fq.gz IS6.fq.gz LAN2B.fq.gz LXR1B_1.fq.gz M5_1.fq.gz MEN04_1.fq.gz SA2.fq.gz SA8.fq.gz TRC01_2.fq.gz
+95-201.fq.gz ANF01.fq.gz  CHE01_1.fq.gz HAH01_2.fq.gz IS6_r.fq.gz LAR1A.fq.gz LXR2B.fq.gz M5_2.fq.gz MEN04_2.fq.gz SA2_r.fq.gz SA8_r.fq.gz TRC01.fq.gz
+95-202.fq.gz ASW1.fq.gz CHE01_2.fq.gz IS1.fq.gz Israel1.fq.gz LAR1B_2.fq.gz LXR3A.fq.gz M6.fq.gz  MFS20.fq.gz SA3.fq.gz SA9.fq.gz VM1_1.fq.gz
+95-53.fq.gz ASW2.fq.gz COB1B.fq.gz IS1_r.fq.gz Israel2.fq.gz LAR1B.fq.gz LXR3B.fq.gz M7.fq.gz  MFS23.fq.gz SA3_r.fq.gz SA9_r.fq.gz VM1.fq.gz
+95-59.fq.gz AUB01A_1.fq.gz COB2A.fq.gz IS2.fq.gz Israel4.fq.gz LAR1C.fq.gz M10.fq.gz M8.fq.gz  MFS26.fq.gz SA4.fq.gz SDN2A_1.fq.gz
+AGN1A.fq.gz AUB01A_2.fq.gz COB2B.fq.gz IS2_r.fq.gz KE1-1.fq.gz LIK1A_2.fq.gz M11.fq.gz MEB01B.fq.gz MFS27.fq.gz SA4_r.fq.gz SDN2A_2.fq.gz
+AGN1A_r.fq.gz AUB01B_1.fq.gz COB3A.fq.gz IS3.fq.gz KE1-1_r.fq.gz LIK1A.fq.gz M12.fq.gz MEN01A_1.fq.gz MFS28.fq.gz SA5.fq.gz SDN2B_1.fq.gz
+AGN1B.fq.gz AUB01B_2.fq.gz COB3B.fq.gz IS3_r.fq.gz KE1-2.fq.gz LIK1A_r.fq.gz M13.fq.gz MEN01B_1.fq.gz MFS29.fq.gz SA5_r.fq.gz SDN2B_2.fq.gz
+AGN1B_r.fq.gz BIS1B.fq.gz  EG1.fq.gz IS4.fq.gz KE1-2_r.fq.gz LIK1B.fq.gz M14.fq.gz MEN01B_2.fq.gz SA10.fq.gz  SA6.fq.gz SMS01_1.fq.gz
+AGN2A.fq.gz BIS5A.fq.gz  EG1_r.fq.gz IS4_r.fq.gz LAN1A.fq.gz LIK2A.fq.gz M2.fq.gz  MEN02_1.fq.gz SA10_r.fq.gz SA6_r.fq.gz SMS01_2.fq.gz"
+#
+i=1
+for file in $files
+do
+	ustacks -i $i -f /work/LAS/kjroe-lab/fig/process_radtags_out/${file} -m 12 -M 2 --max_locus_stacks 8 -d -o /work/LAS/kjroe-lab/fig/ustacks_out_138/ -t fq.gz -p 50
+let "i+=1";
+done
+
+#!/bin/bash		
+#SBATCH --ntasks=64	
+#SBATCH --partition=biocrunch		
+#SBATCH --nodes=1		
+#SBATch --mem=128G		
+#SBATCH --time=15-00:00:00		
+#SBATCH --error=/work/LAS/kjroe-lab/fig/ustacks_out.%J.err}		
+		
+module load gcc/7.3.0-xegsmw4
+module load stacks/2.53-vlzyasr
+ 
+#!/bin/bash
+files="95-59.fq.gz AUB01A_1.fq.gz COB2A.fq.gz IS2.fq.gz Israel4.fq.gz LAR1C.fq.gz M10.fq.gz M8.fq.gz  MFS26.fq.gz SA4.fq.gz SDN2A_1.fq.gz
+AGN1A.fq.gz AUB01A_2.fq.gz COB2B.fq.gz IS2_r.fq.gz KE1-1.fq.gz LIK1A_2.fq.gz M11.fq.gz MEB01B.fq.gz MFS27.fq.gz SA4_r.fq.gz SDN2A_2.fq.gz
+AGN1A_r.fq.gz AUB01B_1.fq.gz COB3A.fq.gz IS3.fq.gz KE1-1_r.fq.gz LIK1A.fq.gz M12.fq.gz MEN01A_1.fq.gz MFS28.fq.gz SA5.fq.gz SDN2B_1.fq.gz
+AGN1B.fq.gz AUB01B_2.fq.gz COB3B.fq.gz IS3_r.fq.gz KE1-2.fq.gz LIK1A_r.fq.gz M13.fq.gz MEN01B_1.fq.gz MFS29.fq.gz SA5_r.fq.gz SDN2B_2.fq.gz
+AGN1B_r.fq.gz BIS1B.fq.gz  EG1.fq.gz IS4.fq.gz KE1-2_r.fq.gz LIK1B.fq.gz M14.fq.gz MEN01B_2.fq.gz SA10.fq.gz  SA6.fq.gz SMS01_1.fq.gz
+AGN2A.fq.gz BIS5A.fq.gz  EG1_r.fq.gz IS4_r.fq.gz LAN1A.fq.gz LIK2A.fq.gz M2.fq.gz  MEN02_1.fq.gz SA10_r.fq.gz SA6_r.fq.gz SMS01_2.fq.gz"
+#
+i=73
+for file in $files
+do
+	ustacks -i $i -f /work/LAS/kjroe-lab/fig/process_radtags_out/${file} -m 12 -M 2 --max_locus_stacks 8 -d -o /work/LAS/kjroe-lab/fig/ustacks_out/ -t fq.gz -p 30
+let "i+=1";
+done
+
+
+2. cstacks
+43 samples: greater than 100 Mb, 2 per each sampling site
+[kkim@pronto fig]$ cat cstacks_43_138_new.sh 
+#!/bin/bash
+#SBATCH --ntasks=32
+#SBATCH --partition=whatever
+#SBATCH --nodes=1
+#SBATch --mem=50G
+#SBATCH --time=15-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/cstacks_out_138.%J.err
+
+module load stacks/2.53-2n4xbp4
+
+cstacks -n 1 -p 30 -o /work/LAS/kjroe-lab/fig/cstacks_out_138/ -s /work/LAS/kjroe-lab/fig/ustacks_out_138/Israel4 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LAN2A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/SA4_r -s /work/LAS/kjroe-lab/fig/ustacks_out_138/SA3 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/IS5_r -s /work/LAS/kjroe-lab/fig/ustacks_out_138/IS1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LXR3A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/BIS6A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LXR1B_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/MFS20 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/COB1B -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LAN1A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/EG1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LIK1A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/KE1-1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/MEN04_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/SDN2A_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/SDN2B_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/M11 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/95-53 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/M13 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/AGN3A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/MFS27 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/95-59 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/MEN02_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/AGN1B -s /work/LAS/kjroe-lab/fig/ustacks_out_138/COB2B -s /work/LAS/kjroe-lab/fig/ustacks_out_138/BIS5B -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LIK2A -s /work/LAS/kjroe-lab/fig/ustacks_out_138/MEB01B -s /work/LAS/kjroe-lab/fig/ustacks_out_138/SMS01_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/ASW2 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/TRC01_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/AUB01B_2 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LAR1C -s /work/LAS/kjroe-lab/fig/ustacks_out_138/LAR1B_2 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/HAH01_1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/CHE01_2 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/TRC01 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/Israel1 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/HAH01_2 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/ANF01 -s /work/LAS/kjroe-lab/fig/ustacks_out_138/AUB01A_2
+
+3. sstacks
+
+[kkim@pronto kkim]$ cat sstacks_138.sh 
+#!/bin/bash
+#SBATCH --ntasks=32
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=50G
+#SBATCH --time=15-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/sstacks_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+
+#!/bin /bash
+files="95-12B AGN2B  BIS5B EPL1A IS5 LAN1B LIK2B M3  MEN02_2 SA1 SA7 SON001
+95-18 AGN3A  BIS6A EPL1B IS5_r LAN2A LXR1A M4  MEN03 SA1_r SA7_r TRC01_1
+95-200 AGN3B  BIS6B HAH01_1 IS6 LAN2B LXR1B_1 M5_1 MEN04_1 SA2 SA8 TRC01_2
+95-201 ANF01  CHE01_1 HAH01_2 IS6_r LAR1A LXR2B M5_2 MEN04_2 SA2_r SA8_r TRC01
+95-202 ASW1 CHE01_2 IS1 Israel1 LAR1B_2 LXR3A M6  MFS20 SA3 SA9 VM1_1
+95-53 ASW2 COB1B IS1_r Israel2 LAR1B LXR3B M7  MFS23 SA3_r SA9_r VM1
+95-59 AUB01A_1 COB2A IS2 Israel4 LAR1C M10 M8  MFS26 SA4 SDN2A_1
+AGN1A AUB01A_2 COB2B IS2_r KE1-1 LIK1A_2 M11 MEB01B MFS27 SA4_r SDN2A_2
+AGN1A_r AUB01B_1 COB3A IS3 KE1-1_r LIK1A M12 MEN01A_1 MFS28 SA5 SDN2B_1
+AGN1B AUB01B_2 COB3B IS3_r KE1-2 LIK1A_r M13 MEN01B_1 MFS29 SA5_r SDN2B_2
+AGN1B_r BIS1B  EG1 IS4 KE1-2_r LIK1B M14 MEN01B_2 SA10  SA6 SMS01_1
+AGN2A BIS5A  EG1_r IS4_r LAN1A LIK2A M2  MEN02_1 SA10_r SA6_r SMS01_2"
+#
+for file in $files
+do
+	sstacks -c /work/LAS/kjroe-lab/fig/cstacks_out_138/ -s /work/LAS/kjroe-lab/fig/ustacks_out_138/$file -o /work/LAS/kjroe-lab/fig/sstacks_out_138/ -p 30
+done
+
+
+4. tsv2bam: The tsv2bam program will transpose data so that it is oriented by locus, instead of by sample. 
+
+[kkim@pronto kkim]$ nano tsv2bam_134.sh 
+
+squeue -u kkim
+
+#!/bin/bash
+#SBATCH --ntasks=32
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=50G
+#SBATCH --time=5-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/tsv2bam_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+tsv2bam -P /work/LAS/kjroe-lab/fig/ustacks_out_138/ -M /work/LAS/kjroe-lab/fig/popmap/popmap_134_ind.txt -t 32
+
+5. gstacks
+
+[kkim@pronto kkim]$ nano gstacks_134.sh 
+
+#!/bin/bash
+#SBATCH --ntasks=32
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=50G
+#SBATCH --time=5-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/gstacks_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+
+gstacks -P /work/LAS/kjroe-lab/fig/ustacks_out_138/ -M /work/LAS/kjroe-lab/fig/popmap/popmap_134_ind.txt -t 32
+
+
+6. populations for phylogenetic study
+
+# Process only loci shared by 70% (95 samples) of 138 samples
+srun --nodes 1 --tasks 4 --partition interactive --time 03:00:00 --pty bash
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_138_ind_p94_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_134_ind.txt -p 94 -t 8 --phylip-var --write-single-snp 
+
+catalog.fa.gz
+populations -P ./stacks/ --vcf -t 8
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_138_ind_p94_SinSNP --vcf -t 8
+
+nano populations.sh 
+#!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_138_ind_p94_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_134_ind.txt -p 94 -t 8 --phylip-var --write-single-snp 
+
+nano populations_R_0.6.sh 
+#!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_138_ind_p94_R_0.6_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_134_ind.txt -p 94 -R 0.6 -t 8 --phylip-var --write-single-snp 
+
+
+nano populations_125_p88.sh 
+#!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_125_ind_p88_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_125_ind.txt -p 88 --vcf -t 8 --phylip-var --write-single-snp 
+
+
+7. populations for pop gen study
+
+# Process only loci shared by 50% of selected samples
+
+nano populations_76_8pop.sh
+#!/bin/bash
+#SBATCH --ntasks=16
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_76_pop_p4_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_76_pop.txt -p 4 -r 0.5 -t 16 --min-maf 0.05 --plink --structure --genepop --vcf --write-single-snp
+
+
+nano populations_69_7pop_p4.sh
+#!/bin/bash
+#SBATCH --ntasks=16
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_69_pop_p4_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_69_pop.txt -p 4 -r 0.5 -t 16 --min-maf 0.05 --plink --structure --genepop --vcf --write-single-snp --fstats --fst_correction
+
+
+
+nano populations_76_8pop_p4_Fst.sh
+#!/bin/bash
+#SBATCH --ntasks=16
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_76_pop_p4_Fst_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_76_pop.txt -p 4 -r 0.5 -t 16 --min-maf 0.05 --plink --structure --genepop --vcf --write-single-snp --fstats --fst-correction
+
+nano populations_76_8pop_p1_Fst.sh
+#!/bin/bash
+#SBATCH --ntasks=16
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_76_pop_p1_Fst_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_76_pop.txt -p 1 -r 0.5 -t 16 --min-maf 0.05 --plink --structure --genepop --vcf --write-single-snp --fstats --fst-correction
+
+nano populations_76_8pop_p1_r0.7_Fst.sh
+#!/bin/bash
+#SBATCH --ntasks=16
+#SBATCH --partition=biocrunch
+#SBATCH --nodes=1
+#SBATch --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --error=/work/LAS/kjroe-lab/fig/populations_out/populations_out.%J.err
+
+module load stacks/2.53-2n4xbp4
+populations -P /work/LAS/kjroe-lab/fig/ustacks_out_138 -O /work/LAS/kjroe-lab/fig/populations_out/fig_76_pop_p1_r0.7_Fst_SinSNP -M /work/LAS/kjroe-lab/fig/popmap/popmap_76_pop.txt -p 1 -r 0.7 -t 16 --min-maf 0.02 --plink --structure --genepop --vcf --write-single-snp --fstats --fst-correction
+
+
+Summarizing sequencing depth for each individual 
+./vcftools --vcf input_data.vcf --depth -c > depth_summary.txt
+vcftools --vcf populations.snps.vcf --depth -c > depth_summary.txt
+
+Summarizing sequencing depth for each site. 
+vcftools --vcf input_data.vcf --site-depth --max-missing 1.0 --out site_depth_summary
+vcftools --vcf populations.snps.vcf --site-depth --out site_depth_summary
+vcftools --vcf populations.snps.vcf --site-depth --max-missing 1.0 --out site_depth_summary
+
+
+Additional usage for this study
+# vcftools for depth of coverage
+vcftools --vcf ./kkim/cgdr_corr_snp_156_4species/batch_1.vcf --out ./depth/cgdr_156 --site-mean-depth
+# plink for calculate SNP error rate
+plink --file ./kkim/cg_duplicate_520/batch_1.plink --allow-no-sex --recodeA --allow-extra-chr
